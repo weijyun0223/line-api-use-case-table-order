@@ -9,8 +9,7 @@ These peripheral resources need to be deployed for this app:
 
 ### 1. Common processing layer (Layer)
 
-In AWS Lambda, you can describe the process you want to use in common with multiple Lambda functions as a layer.　　
-Since this app uses layers, first deploy the layers by following these steps:
+In AWS Lambda, you can describe the process you want to use in common with multiple Lambda functions as a layer. Since this app uses layers, first deploy the layers by following these steps:
 
 - Change template.yaml
   Open template.yaml in the backend > Layer folder and change this parameter item in the EnvironmentMap dev:
@@ -41,7 +40,7 @@ sam deploy --guided
   After deployment, the layer ARN and layer version will be displayed in the Outputs section of the terminal, so note the layer version.
   The layer version is the number at the end.  
   *The version is updated every time you deploy, so the correct version for your first deployment is version 1.  
-  ![Output section of the command prompt](../images/en/out-put-description.png)
+  ![Output section of the command prompt](../images/en/out-put-description-en.png)
 
 - [Confirmation] Open the Lambda console in the AWS Management Console, select "Layers" from the left tab, and confirm that the layer you deployed this time exists.
 
