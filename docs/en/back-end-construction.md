@@ -11,7 +11,8 @@ These peripheral resources need to be deployed for this app:
 
 In AWS Lambda, you can describe the process you want to use in common with multiple Lambda functions as a layer. Since this app uses layers, first deploy the layers by following these steps:
 
-- Change template.yaml
+- Change template.yaml:
+  
   Open template.yaml in the backend > Layer folder and change this parameter item in the EnvironmentMap dev:
 
   - `LayerName` any layer name
@@ -36,9 +37,10 @@ sam deploy --guided
     Deploy this changeset? [y/N]: y
 ```
 
-- Note the layer version
-  After deployment, the layer ARN and layer version will be displayed in the Outputs section of the terminal, so note the layer version.
-  The layer version is the number at the end.  
+- Note the layer version:
+  
+  After deployment, the layer ARN and layer version will be displayed in the Outputs section of the terminal, so note the layer version. The layer version is the number at the end.
+  
   *The version is updated every time you deploy, so the correct version for your first deployment is version 1.  
   ![Output section of the command prompt](../images/en/out-put-description-en.png)
 
@@ -51,7 +53,8 @@ Since the short-term channel access tokens expire 30 days after they are obtaine
 We use the Amazon Event Bridge [official documentation](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html) to get the batch working on time.  
 Follow these steps to deploy the batch:
 
-- Change template.yaml
+- Change template.yaml:
+  
   Open template.yaml in the backend > batch folder and change this parameter item in the EnvironmentMap dev:
 
   - `LINEChannelAccessTokenDBName` Any table name (the table that manages short-term channel access tokens)
@@ -82,14 +85,15 @@ sam deploy --guided
     Deploy this changeset? [y/N]: y
 ```
 
-- Register the channel ID and channel secret in the table
+- Register the channel ID and channel secret in the table:
   - Log in to the AWS Management Console and open the DynamoDB console
-  - Create an item in the "Table for managing short-term channel access tokens" created earlier, and register the channel ID and channel secret of the Messaging API channel created in [Creating a LINE channel] as follows　　
+  - Create an item in the "Table for managing short-term channel access tokens" created earlier, and register the channel ID and channel secret of the Messaging API channel created in [Creating a LINE channel] as follows
+    
     The channel ID and channel secret can be found in the basic channel settings in the [LINE Developers Console](https://developers.line.biz/console/).
     - channelId: Channel ID (String)
     - channelSecret: Channel secret (String)
       ![Registering a channel access token](../images/en/channel-access-token-table-record-en.png)
-- Execute the Lambda function for updating the channel access token
+- Execute the Lambda function for updating the channel access token:
   - Log in to the AWS Management Console and open the Lambda console
   - Open the Lambda function created earlier (function name is TableOrder-PutAccessToken-{value specified by Enviroment})
   - Select "Test Event Settings" from the test event selection drop-down menu in the top-right corner of the Lambda function console
@@ -103,7 +107,8 @@ sam deploy --guided
 Follow these steps to deploy the app:
 
 - Change template.yaml
-  Open template.yaml in the backend > APP folder, and modify these parameter items of dev in EnvironmentMap:　　
+  Open template.yaml in the backend > APP folder, and modify these parameter items of dev in EnvironmentMap:
+  
   *If you need the S3 access log, uncomment the part that says ACCESS LOG SETTING.
 
   - `LineChannelId` The channel ID of the Messaging API channel created in [Creating a LINE channel]
@@ -112,24 +117,25 @@ Follow these steps to deploy the app:
   - `LinePayChannelId` The channel ID of the LINE Pay channel created in [Creating a LINE channel]
   - `LinePayChannelSecret` Channel secret for the LINE Pay channel created in [Creating a LINE channel]
   - `LinePayIsSandbox` True or False
-    *Specify the basic True　　
-    True: Uses a sandbox environment. You will not be charged by LINE Pay.　　
-    False: LINE Pay "test merchant environment" will be used. The user's LINE Pay balance will be temporarily debited and the amount spent will be refunded after a certain period of time.
+    - True: Uses a sandbox environment. You will not be charged by LINE Pay.
+    - False: LINE Pay "test merchant environment" will be used. The user's LINE Pay balance will be temporarily debited and the amount spent will be refunded after a certain period of time.
   - `ItemListDBName` Any table name (table to register product information)
   - `PaymentInfoDBName` Any table name (table to register payment information)
   - `LINEChannelAccessTokenDBName` Table name of the "table that manages the short-term channel access token" deployed in the [2. Periodic execution batch] procedure
-  - `FrontS3BucketName` Any bucket name *This will be the S3 bucket name to place the front-side module.
+  - `FrontS3BucketName` Any bucket name
+    - This will be the S3 bucket name to place the front-side module.
   - `LayerVersion` The version number of the layer deployed in the [1. Common processing layer] procedure
-    Example: LayerVersion: 1
+    - Example. LayerVersion: 1
   - `LoggerLevel` INFO or Debug
   - `LambdaMemorySize` Lambda memory size　　
-    Example) LambdaMemorySize: 128 *If you don't need to change it, specify the minimum size of 128
+    - Example. LambdaMemorySize: 128
+    - If you don't need to change it, specify the minimum size of 128
   - `TTL` True or False (whether to delete order information automatically)
   - `TTLDay` Any number (If TTL is True, specify how many days after registration the reservation information will be deleted; if TTL is False, enter 0)
   - `LogS3Bucket` Any bucket name (the name of the S3 where the access log is stored)　　
-  *Cancel the comment and record it only if you need an access log. Also, if you've already built another Use Case app, specify its access log bucket name and alias.
+    - Cancel the comment and record it only if you need an access log. Also, if you've already built another Use Case app, specify its access log bucket name and alias.
   - `LogFilePrefix` Any name (log file prefix)　　
-  *Cancel the comment and record it only if you need an access log.
+    - Cancel the comment and record it only if you need an access log.
 
 - Run this command:
 
